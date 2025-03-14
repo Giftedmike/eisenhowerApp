@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EisenhowerAPP</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="index.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body class="d-flex align-items-center justify-content-center vh-100">
+  <div class="mx-auto custom-container px-4 bg-light border shadow rounded" id="myDivSignUp">
+    <h1 class="pt-3 text-center">Eisenhower</h1>
+    <h2 class="pt-2 text-center">Sign Up</h2>
+    <hr />
+
+    <form class="h4 py4">
+      <div class="mb-3">
+        <label for="exampleInputfName" class="form-label">First Name</label>
+        <input type="text" class="form-control" id="exampleInputfName">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputlName" class="form-label">Last Name</label>
+        <input type="text" class="form-control" id="exampleInputlName">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1">
+      </div>
+    </form>
+
+    <div class="text-center">
+      <button onclick="newUsers()" id="signIn" class="btn btn-primary px-5 mt-3 mb-3" style="font-size: 25px;">Sign Up</button>
+      <p class="h5 pt-3">Login With Social Accounts</p>
+    </div>
+
+    <div class="text-center" >
+      <div class="social-icons" >
+        <a href="#" onclick="signGoogle()">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="#" onclick="signFacebook()">
+          <i class="fa-brands fa-facebook"></i>
+        </a>
+        <a href="#" onclick="signGit()">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+    </div>
+    
+    <div>
+      <p class="h5 pt-3 text-center">Have an account?
+        <a href="index.html">Sign In</a>
+      </p>
+    </div>
+</body>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAHRE9rFaHuCzCJd4LU5WqNDmHaIIDS0w0", 
+    authDomain: "eisenhower-d0007.firebaseapp.com",
+    projectId: "eisenhower-d0007",
+    storageBucket: "eisenhower-d0007.appspot.com",
+    messagingSenderId: "926940294040",
+    appId: "1:926940294040:web:ea40bdae784341d184d9ed"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  const providerfb = new FacebookAuthProvider();
+  const providergit = new GithubAuthProvider();
+
+  const newUsers = () => {
+    const fname = document.getElementById("exampleInputfName").value;
+    const lname = document.getElementById("exampleInputlName").value;
+    const email = document.getElementById("exampleInputEmail1").value;
+    const password = document.getElementById("exampleInputPassword1").value;
+
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed up 
+            const user = userCredential.user;
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
+    }
+
+  const signFacebook = () => {
+    signInWithPopup(auth, providerfb)
+      .then((result) => {
+        // The signed-in user info.
+        const user = result.user;
+        console.log("Facebook Sign-in Success:", user);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = FacebookAuthProvider.credentialFromError(error);
+      });
+  }
+
+  const signGit = () => {
+    signInWithPopup(auth, providergit)
+      .then((result) => {
+        // The signed-in user info.
+        const user = result.user;
+        console.log("Github sign-in successful")
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GithubAuthProvider.credentialFromError(error);
+        // ...
+      });
+  }
+
+  const signGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+        
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+      });
+  }
+  window.signGoogle = signGoogle;
+  window.signFacebook = signFacebook;
+  window.signGit = signGit;
+  window.newUsers = newUsers;
+</script>
+</html>
