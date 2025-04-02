@@ -98,11 +98,12 @@
     </section>
 
     <script type="module">
+        // Import the functions for the SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
         import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
-        // Your web app's Firebase configuration
+        // The web app Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAHRE9rFaHuCzCJd4LU5WqNDmHaIIDS0w0", 
             authDomain: "eisenhower-d0007.firebaseapp.com",
@@ -147,8 +148,8 @@
             });
         });
        
-    // Do Section
-    const addBtnDo = document.getElementById("addDo");
+        // Do Section
+        const addBtnDo = document.getElementById("addDo");
         const deleteBtnDo = document.getElementById("deleteTaskDo");
         const doDisplay = document.getElementById("doDisplay");
         const userInputDo = document.getElementById("userInputDo");
@@ -190,7 +191,7 @@
             }
         });
 
-        // Generic function to load tasks for a section
+        // function to load tasks for a section
         function loadTasks(section, displayElement) {
             if (!currentUser) return;
 
@@ -212,7 +213,7 @@
             });
         }
 
-        // Generic function to add a task for a section
+        // function to add a task for a section
         function addTask(inputElement, section) {
             if (!currentUser) {
                 alert("You must be signed in to add tasks!");
@@ -239,7 +240,7 @@
             }, { onlyOnce: true });
         }
 
-        // Generic function to delete a task for a section
+        // function to delete a task for a section
         function deleteTask(displayElement, section) {
             if (!currentUser) {
                 alert("You must be signed in to delete tasks!");

@@ -7,7 +7,7 @@
   .myBody {
     width: 800px;   /* Width of the div */
     padding: 20px;  
-    margin-top: 15px;
+    margin-top: 55px;
     background-color: aliceblue;
     border-radius: 4%;
     color: black;
@@ -23,7 +23,7 @@
    
   body {
   background-color: #F7F7E7;
-  color: #027c07 !important;
+  color: #071308 !important;
 }
 
 .social-icons {
