@@ -31,43 +31,71 @@
         </div>
     </nav>
 
-<section class="container myBody text-center shadow">
-    <div>
-        <h1>The Eisenhower Decision Matrix</h1>
-    </div>
-    <div class="row px-3">
-        
-        <div class="col-6 bg-success do shadow">
-            <i class="fa-solid fa-bell fa-3x pt-3"></i>
-            <h1>Do</h1>
-            <h3>Urgent, Important</h3> <hr>
-            <div class="bg-light rounded shadow mb-2" id="doDisplay" style="width: 100%;">
-                
+    <section class="container myBody text-center shadow">
+        <div>
+            <h1>The Eisenhower Decision Matrix</h1>
+        </div>
+        <div class="row px-3"> 
+            <div class="col-md-6 bg-success do shadow todo-container"> 
+                <i class="fa-solid fa-bell fa-3x pt-3"></i>
+                <h1>Do</h1>
+                <h3>Urgent, Important</h3> <hr>
+                <div class="bg-light rounded shadow mb-2" style="width: 100%; height: 180px; overflow-y: auto;"> 
+                    <div id="doDisplay" style="padding: 10px;">
+                    </div>
+                </div>
+                <div class="todo-input-area">
+                    <input class="rounded shadow py-1" type="text" id="userInputDo" placeholder="Enter Task">
+                    <button class="btn btn-warning" id="addDo">Add</button>
+                    <button class="btn btn-danger" id="deleteTaskDo">Delete</button>
+                </div>
             </div>
-            <input class="rounded shadow py-1" type="text" id="userInput" placeholder="Enter Task">
-            <button class="btn btn-warning" id="addDo">Add</button>
-            <button class="btn btn-danger" id="deleteTask">Delete</button>
-
+            <div class="col-md-6 bg-warning decide shadow todo-container">
+                <i class="fa-solid fa-calendar fa-3x pt-3"></i>
+                <h1>Decide</h1>
+                <h3>Not Urgent, Important</h3> <hr>
+                <div class="bg-light rounded shadow mb-2" style="width: 100%; height: 180px; overflow-y: auto;"> 
+                    <div id="decideDisplay" style="padding: 10px;">
+                    </div>
+                </div>
+                <div class="todo-input-area">
+                    <input class="rounded shadow py-1" type="text" id="userInputDecide" placeholder="Enter Task">
+                    <button class="btn btn-warning" id="addDecide">Add</button>
+                    <button class="btn btn-danger" id="deleteTaskDecide">Delete</button>
+                </div>
+            </div>
         </div>
-        <div class="col-6 bg-warning decide shadow">
-            <i class="fa-solid fa-calendar fa-3x pt-3"></i>
-            <h1>Decide</h1>
-            <h3>Not Urgent, Important</h3> <hr>
+        <div class="row px-3 pt-3"> 
+            <div class="col-md-6 bg-info delegate shadow todo-container">
+                <i class="fa-solid fa-people-arrows fa-3x pt-3"></i>
+                <h1>Delegate</h1>
+                <h3>Urgent, Not Important</h3> <hr>
+                <div class="bg-light rounded shadow mb-2" style="width: 100%; height: 180px; overflow-y: auto;"> 
+                    <div id="delegateDisplay" style="padding: 10px;">
+                    </div>
+                </div>
+                <div class="todo-input-area">
+                    <input class="rounded shadow py-1" type="text" id="userInputDelegate" placeholder="Enter Task">
+                    <button class="btn btn-warning" id="addDelegate">Add</button>
+                    <button class="btn btn-danger" id="deleteTaskDelegate">Delete</button>
+                </div>
+            </div>
+            <div class="col-md-6 bg-danger delete shadow todo-container">
+                <i class="fa-solid fa-trash fa-3x pt-3"></i>
+                <h1>Delete</h1>
+                <h3>Not Urgent, Not Important</h3> <hr>
+                <div class="bg-light rounded shadow mb-2" style="width: 100%; height: 180px; overflow-y: auto;"> 
+                    <div id="deleteDisplay" style="padding: 10px;">
+                    </div>
+                </div>
+                <div class="todo-input-area">
+                    <input class="rounded shadow py-1" type="text" id="userInputDelete" placeholder="Enter Task">
+                    <button class="btn btn-warning" id="addDelete">Add</button>
+                    <button class="btn btn-danger" id="deleteTaskDelete">Delete</button>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row px-3 pt-3">
-        <div class="col-6 bg-info delegate shadow">
-            <i class="fa-solid fa-people-arrows fa-3x pt-3"></i>
-            <h1>Delegate</h1>
-            <h3>Urgent, Not Important</h3> <hr>
-        </div>
-        <div class="col-6 bg-danger delete shadow">
-            <i class="fa-solid fa-trash fa-3x pt-3"></i>
-            <h1>Delete</h1>
-            <h3>Not Urgent, Not Important</h3> <hr>
-        </div>
-    </div>
-</section>
+    </section>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
@@ -119,97 +147,128 @@
             });
         });
        
-    // Add new task
-    const addBtn = document.getElementById("addDo");
-    const deleteBtn = document.getElementById("deleteTask"); 
-    let selectedTaskId = null; // Store the selected task ID
-    let currentUser = null; // Store the logged-in user
+    // Do Section
+    const addBtnDo = document.getElementById("addDo");
+        const deleteBtnDo = document.getElementById("deleteTaskDo");
+        const doDisplay = document.getElementById("doDisplay");
+        const userInputDo = document.getElementById("userInputDo");
 
-    // Listen for authentication state changes
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUser = user;
-            loadUserTasks();
-        } else {
-            currentUser = null;
-            document.getElementById("doDisplay").innerHTML = "Please sign in to see your tasks.";
-        }
-    });
+        // Decide Section
+        const addBtnDecide = document.getElementById("addDecide");
+        const deleteBtnDecide = document.getElementById("deleteTaskDecide");
+        const decideDisplay = document.getElementById("decideDisplay");
+        const userInputDecide = document.getElementById("userInputDecide");
 
-    // Add new task
-    addBtn.addEventListener("click", () => {
-        let userInput = document.getElementById("userInput");
-        if (!currentUser) {
-            alert("You must be signed in to add tasks!");
-            return;
-        }
+        // Delegate Section
+        const addBtnDelegate = document.getElementById("addDelegate");
+        const deleteBtnDelegate = document.getElementById("deleteTaskDelegate");
+        const delegateDisplay = document.getElementById("delegateDisplay");
+        const userInputDelegate = document.getElementById("userInputDelegate");
 
-        if (userInput.value === "") {
-            alert("Value must be entered");
-        } else {
-            let addInput = userInput.value;
-            userInput.value = ""; // Clear input field
+        // Delete Section
+        const addBtnDelete = document.getElementById("addDelete");
+        const deleteBtnDelete = document.getElementById("deleteTaskDelete");
+        const deleteDisplay = document.getElementById("deleteDisplay");
+        const userInputDelete = document.getElementById("userInputDelete");
 
-            // Store task under the user's UID with a unique key
-            const userTaskRef = ref(database, `tasks/${currentUser.uid}`);
-            push(userTaskRef, addInput); 
-        }
-    });
+        const maxItems = 5; 
+        let currentUser = null; 
 
-    // Load only the logged-in user's tasks
-    function loadUserTasks() {
-        if (!currentUser) return;
-
-        const userTaskRef = ref(database, `tasks/${currentUser.uid}`);
-
-        onValue(userTaskRef, (snapshot) => {
-            const data = snapshot.val();
-            let addOutput = document.getElementById("doDisplay");
-            addOutput.innerHTML = ""; // Clear previous output
-            selectedTaskId = null; // Reset selected task
-
-            if (data) {
-                Object.entries(data).forEach(([taskId, task]) => {
-                    let taskItem = document.createElement("div");
-
-                    // Create radio button
-                    let radioBtn = document.createElement("input");
-                    radioBtn.type = "radio";
-                    radioBtn.name = "taskSelect"; // Ensures only one can be selected at a time
-                    radioBtn.value = taskId;
-                    radioBtn.addEventListener("change", () => {
-                        selectedTaskId = taskId; // Store the selected task ID
-                    });
-
-                    // Add task text
-                    let taskLabel = document.createElement("label");
-                    taskLabel.innerText = ` ${task}`;
-                    
-                    // Append elements
-                    taskItem.appendChild(radioBtn);
-                    taskItem.appendChild(taskLabel);
-                    addOutput.appendChild(taskItem);
-                });
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadTasks("do", doDisplay);
+                loadTasks("decide", decideDisplay);
+                loadTasks("delegate", delegateDisplay);
+                loadTasks("delete", deleteDisplay);
             } else {
-                addOutput.innerHTML = "No tasks added yet.";
+                currentUser = null;
+                doDisplay.innerHTML = "Please sign in to see your tasks.";
+                decideDisplay.innerHTML = "Please sign in to see your tasks.";
+                delegateDisplay.innerHTML = "Please sign in to see your tasks.";
+                deleteDisplay.innerHTML = "Please sign in to see your tasks.";
             }
         });
-    }
 
-    // Delete selected task when the delete button is clicked
-    deleteBtn.addEventListener("click", () => {
-        if (!currentUser || !selectedTaskId) {
-            alert("Please select a task to delete.");
-            return;
+        // Generic function to load tasks for a section
+        function loadTasks(section, displayElement) {
+            if (!currentUser) return;
+
+            const userTaskRef = ref(database, `tasks/${currentUser.uid}/${section}`);
+
+            onValue(userTaskRef, (snapshot) => {
+                const data = snapshot.val();
+                displayElement.innerHTML = ""; 
+
+                if (data) {
+                    Object.entries(data).forEach(([taskId, task]) => {
+                        let taskItem = document.createElement("div");
+                        taskItem.innerHTML = `<input type="radio" name="${section}Tasks" value="${taskId}"> <label>${task}</label>`;
+                        displayElement.appendChild(taskItem);
+                    });
+                } else {
+                    displayElement.innerHTML = "No tasks added yet.";
+                }
+            });
         }
 
-        const taskRef = ref(database, `tasks/${currentUser.uid}/${selectedTaskId}`);
-        remove(taskRef).then(() => {
-            selectedTaskId = null; // Reset selection after deletion
-        }).catch((error) => {
-            console.error("Error deleting task:", error);
-        });
-    });
+        // Generic function to add a task for a section
+        function addTask(inputElement, section) {
+            if (!currentUser) {
+                alert("You must be signed in to add tasks!");
+                return;
+            }
+            if (inputElement.value === "") {
+                alert("Value must be entered");
+                return;
+            }
+
+            const taskText = inputElement.value;
+            inputElement.value = "";
+
+            const userTaskRef = ref(database, `tasks/${currentUser.uid}/${section}`);
+            onValue(userTaskRef, (snapshot) => {
+                const data = snapshot.val();
+                const taskCount = data ? Object.keys(data).length : 0;
+
+                if (taskCount < maxItems) {
+                    push(userTaskRef, taskText);
+                } else {
+                    alert("You've reached the maximum number of tasks (5).");
+                }
+            }, { onlyOnce: true });
+        }
+
+        // Generic function to delete a task for a section
+        function deleteTask(displayElement, section) {
+            if (!currentUser) {
+                alert("You must be signed in to delete tasks!");
+                return;
+            }
+
+            const selectedTask = displayElement.querySelector(`input[name="${section}Tasks"]:checked`);
+            if (!selectedTask) {
+                alert("Please select a task to delete.");
+                return;
+            }
+
+            const taskId = selectedTask.value;
+            const taskRef = ref(database, `tasks/${currentUser.uid}/${section}/${taskId}`);
+            remove(taskRef);
+        }
+
+        // Event listeners for each section
+        addBtnDo.addEventListener("click", () => addTask(userInputDo, "do"));
+        deleteBtnDo.addEventListener("click", () => deleteTask(doDisplay, "do"));
+
+        addBtnDecide.addEventListener("click", () => addTask(userInputDecide, "decide"));
+        deleteBtnDecide.addEventListener("click", () => deleteTask(decideDisplay, "decide"));
+
+        addBtnDelegate.addEventListener("click", () => addTask(userInputDelegate, "delegate"));
+        deleteBtnDelegate.addEventListener("click", () => deleteTask(delegateDisplay, "delegate"));
+
+        addBtnDelete.addEventListener("click", () => addTask(userInputDelete, "delete"));
+        deleteBtnDelete.addEventListener("click", () => deleteTask(deleteDisplay, "delete"));
     </script>
 </body>
 </html>

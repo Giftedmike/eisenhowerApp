@@ -5,8 +5,7 @@
   }
 
   .myBody {
-    width: 600px;   /* Width of the div */
-    
+    width: 800px;   /* Width of the div */
     padding: 20px;  
     margin-top: 15px;
     background-color: aliceblue;
@@ -15,7 +14,7 @@
   }
 
   .do, .delegate, .decide, .delete {
-    height: 375px;
+    height: 430px;
     border-radius: 5%;
   }
   i {
@@ -46,7 +45,12 @@
   font-size: 20px !important;
 }
  
-#doDisplay {
-  text-align: left; /* Align text to the left */
-  padding-left: 10px; /* Add some padding for spacing */
+#doDisplay, #decideDisplay, #delegateDisplay, #deleteDisplay {
+  text-align: left;
+  padding-left: 10px;
+  font-size: 20px;
+ 
+}
+#userInputDo, #userInputDecide, #userInputDelegate, #userInputDelete {
+  width: 145px !important;
 }
